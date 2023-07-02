@@ -1,0 +1,29 @@
+{
+  "name": "Goatfather",
+  "description": "A Chrome extension to help save and share pair settings for the Goatfather strategy tool",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "goatfather_logo.png",
+    "48": "goatfather_logo.png",
+    "128": "goatfather_logo.png"
+  },
+  "action": {
+    "default_title": "Goatfather",
+    "default_popup": "popup.html"
+  },
+  "host_permissions": ["*://*.tradingview.com/*"],
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.tradingview.com/chart/*"],
+      "run_at": "document_end",
+      "js": ["jquery.js", "contentScript.js"]
+    }
+  ],
+  "permissions": ["tabs", "identity", "storage", "activeTab"]
+}
