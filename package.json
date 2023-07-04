@@ -1,6 +1,6 @@
 {
   "name": "goatfather",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "main": "index.js",
   "description": "A Chrome extension to help save and share pair settings for the Goatfather strategy tool",
   "author": "Smilyan Pavlov",

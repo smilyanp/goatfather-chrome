@@ -73,13 +73,13 @@ function Popup({
               >
                 Select pair
               </option>
-              {pairs.map((pair) => (
+              {pairs.map(({ name, isPopulated }) => (
                 <option
-                  key={pair}
-                  value={pair}
-                  selected={selectedPair === pair}
+                  key={name}
+                  value={name}
+                  selected={selectedPair === name}
                 >
-                  {pair}
+                  {name} {isPopulated && "🐐"}
                 </option>
               ))}
             </Select>

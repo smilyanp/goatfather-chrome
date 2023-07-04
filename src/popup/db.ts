@@ -15,8 +15,8 @@ export const getPairSettingsFromDB = async (
   pair: string
 ) => {
   const db = getFirestore(firebaseApp);
-
   const docSnapshot = await getDoc(doc(db, "pairSettings", pair));
+
   if (docSnapshot.exists()) {
     const pairData = docSnapshot.data();
     const fields = convertDbFieldsToUiFields(pairData.fields) as FieldInUI[];
@@ -58,11 +58,11 @@ export const getAllPairsFromDB = async (
     // doc.data() is never undefined for query doc snapshots
     const pairData = pair.data();
     const isPopulated = Object.keys(pairData.fields).length > 0;
-    if (isPopulated) {
-      pairs.push(`${pair.id} 🐐`);
-    } else {
-      pairs.push(pair.id);
-    }
+
+    pairs.push({
+      name: pair.id,
+      isPopulated,
+    });
   });
   return pairs;
 };
