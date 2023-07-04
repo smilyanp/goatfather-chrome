@@ -1,8 +1,6 @@
-# 🚀 iVendi Dev Tools Chrome Extension with React 🚀
+# 🐐 Goatfather Chrome Extension with React 🐐
 
-<img src="src/static/ivendi_logo.png" alt= “” width="100">
-
-**This tool is not yet Production ready!**
+<img src="src/static/goatfather_logo.png" alt= “” width="100">
 
 ## Dependencies
 
@@ -10,9 +8,9 @@ NodeJS @ ^16
 
 ## Local development
 
-1. `git clone git@github.com:iVendi/ivendi-dev-tools.git`
+1. `git clone git@github.com:smilyanp/goatfather-chrome.git`
 
-2. `cd ivendi-dev-tools`
+2. `cd goatfather-chrome`
 
 3. `npm i`
 
@@ -28,4 +26,4 @@ NodeJS @ ^16
 
 ## Notes
 
-This tool only works for `.dev.co/dealership/platform` based urls. This means you will still need Twingate and the correct login credentials before you cna use it on the Dealership Platform.
+This tool only works for `.tradingview.com/chart` based urls.
