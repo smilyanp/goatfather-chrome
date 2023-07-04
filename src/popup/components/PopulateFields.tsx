@@ -21,6 +21,15 @@ export const PopulateFields = ({ onLoading, firebaseApp, pair }) => {
     );
   };
 
+  if (overview.length === 0 && fields.length === 0) {
+    return (
+      <Box marginBottom={5}>
+        <Heading marginBottom={5} size="md">
+          There is not data for this pair in the database
+        </Heading>
+      </Box>
+    );
+  }
   return (
     <Box marginBottom={5}>
       {/* Actions */}

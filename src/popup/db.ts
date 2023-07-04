@@ -56,7 +56,13 @@ export const getAllPairsFromDB = async (
   const pairs = [];
   pairsSnapshot.forEach((pair) => {
     // doc.data() is never undefined for query doc snapshots
-    pairs.push(pair.id);
+    const pairData = pair.data();
+    const isPopulated = Object.keys(pairData.fields).length > 0;
+    if (isPopulated) {
+      pairs.push(`${pair.id} 🐐`);
+    } else {
+      pairs.push(pair.id);
+    }
   });
   return pairs;
 };
