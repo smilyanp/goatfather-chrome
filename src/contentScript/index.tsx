@@ -1,13 +1,10 @@
-import { FieldInUI } from "../types/fields";
-import { waitForElm } from "../utils";
 import {
-  getFieldType,
-  scrapeEachField,
-  setInputValue,
-  setSelectDropdownValue,
+  getFieldValuesInModal,
+  getOverviewValues,
+  goatFatherTitle,
+  updateFieldsValuesInModal,
 } from "./utils";
-
-const goatFatherTitle = '[data-dialog-name="Goatfather 4.0"]';
+import "./jqueryExtend";
 
 chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
   if (msg.from === "popup" && msg.subject === "IsGoatfatherSettingsOpen") {
@@ -27,47 +24,3 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
     response("done");
   }
 });
-
-const getOverviewValues = () => {
-  return new Promise((resolve, reject) => {
-    const overviewValues = [];
-    const overviewFields = $(".backtesting-content-wrapper").find(
-      "[class^=containerCell-]"
-    );
-    $.each(overviewFields, (index, record) => {
-      const fieldName = $(record).find("[class^=title-]").text();
-      const fieldValue = $(record)
-        .find("[class^=secondRow-]")
-        .children()
-        .first()
-        .text();
-      overviewValues.push({ name: fieldName, value: fieldValue });
-    });
-    resolve(overviewValues);
-  });
-};
-
-const getFieldValuesInModal = () => {
-  return new Promise((resolve, reject) => {
-    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
-      const fields = scrapeEachField();
-      resolve(fields);
-    });
-  });
-};
-
-const updateFieldsValuesInModal = (fields) =>
-  new Promise((resolve, reject) => {
-    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
-      fields.forEach((field) => {
-        const fieldType = getFieldType(field.name);
-        if (fieldType === "input") {
-          setInputValue(field.name, field.value);
-        }
-        if (fieldType === "select") {
-          setSelectDropdownValue(field.name, field.value);
-        }
-        console.log("populate values");
-      });
-    });
-  });

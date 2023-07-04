@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Box, Button, Heading, Stack, Divider } from "@chakra-ui/react";
-import { CollectedFields, FieldInUI, OverviewValue } from "../../types/fields";
+import React from "react";
+import { Box, Button, Heading, Stack } from "@chakra-ui/react";
+import { CollectedFields } from "../../types/fields";
 import { sendTabMessage } from "../utils";
-import { Fields, Overview } from "./Fields";
+import { Fields, Overview } from "./ListFields";
 import { savePairSettingsToDB } from "../db";
 import { useCollectedFields } from "../hooks/useCollectedFields";
 
@@ -26,16 +26,15 @@ export const CollectFields = ({
 
   const handleGetFields = async () => {
     onLoading("Collecting field values from modal...");
-    sendTabMessage(
-      "GetPairSettings",
-      ({ fields: scrapedFields, overview: scrapedOverview }) => {
+    sendTabMessage("GetPairSettings", (scraped) => {
+      if (scraped) {
         setCollectedFields({
-          fields: scrapedFields,
-          overview: scrapedOverview,
+          fields: scraped.fields,
+          overview: scraped.overview,
         });
-        onLoading(false);
       }
-    );
+      onLoading(false);
+    });
   };
 
   const handleResetFields = () => {

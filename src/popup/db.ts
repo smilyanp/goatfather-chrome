@@ -23,7 +23,7 @@ export const getPairSettingsFromDB = async (
     const overview = convertDbFieldsToUiFields(
       pairData.overview
     ) as OverviewValue[];
-    console.log("** fields", fields, "overview", overview);
+
     return {
       fields,
       overview,
@@ -56,7 +56,6 @@ export const getAllPairsFromDB = async (
   const pairs = [];
   pairsSnapshot.forEach((pair) => {
     // doc.data() is never undefined for query doc snapshots
-    // console.log("** pairs", pair.id, " => ", pair.data());
     pairs.push(pair.id);
   });
   return pairs;

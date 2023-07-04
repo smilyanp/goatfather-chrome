@@ -1,27 +1,77 @@
+import { waitForElm } from "../utils";
+
+export const goatFatherTitle = '[data-dialog-name="Goatfather 4.0"]';
+
+export const getOverviewValues = () => {
+  return new Promise((resolve, reject) => {
+    const overviewValues = [];
+    const overviewFields = $(".backtesting-content-wrapper").find(
+      "[class^=containerCell-]"
+    );
+    $.each(overviewFields, (index, record) => {
+      const fieldName = $(record).find("[class^=title-]").text();
+      const fieldValue = $(record)
+        .find("[class^=secondRow-]")
+        .children()
+        .first()
+        .text();
+      overviewValues.push({ name: fieldName, value: fieldValue });
+    });
+    resolve(overviewValues);
+  });
+};
+
+export const getFieldValuesInModal = () => {
+  return new Promise((resolve, reject) => {
+    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
+      const fields = scrapeEachField();
+      resolve(fields);
+    });
+  });
+};
+
+export const updateFieldsValuesInModal = (fields) =>
+  new Promise((resolve, reject) => {
+    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
+      fields.forEach((field) => {
+        const fieldType = getFieldType(field.name);
+        if (fieldType === "input") {
+          setInputValue(field.name, field.value);
+        }
+        if (fieldType === "select") {
+          setSelectDropdownValue(field.name, field.value);
+        }
+      });
+    });
+  });
+
 export const getFieldType = (label: string) => {
+  const checkbox = $(`:econtains('${label}')`)
+    .children()
+    .find('input[type="checkbox"]').length;
+
+  if (checkbox > 0) return "checkbox";
+
   const input = $(`:econtains('${label}')`)
     .parent()
     .next()
     .find("input").length;
+
+  if (input > 0) return "input";
 
   const select = $(`:econtains('${label}')`)
     .parent()
     .next()
     .find('[data-role="listbox"]').length;
 
+  if (select > 0) return "select";
+
   const colorSelect = $(`:econtains('${label}')`)
     .parent()
     .next()
     .find('[data-name="color-select"]').length;
 
-  const checkbox = $(`:econtains('${label}')`)
-    .children()
-    .find('input[type="checkbox"]').length;
-
-  if (input > 0) return "input";
-  if (select > 0) return "select";
   if (colorSelect > 0) return "colorSelect";
-  if (checkbox > 0) return "checkbox";
 
   return "unknown";
 };
@@ -57,6 +107,7 @@ export const scrapeEachField = () => {
           value,
         });
       }
+
       if (fieldType === "select") {
         const value = getSelectDropdownValue(fieldLabel);
         fields.push({

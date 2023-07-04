@@ -3,7 +3,7 @@ import { Button, Box, Heading } from "@chakra-ui/react";
 import { sendTabMessage } from "../utils";
 import { getPairSettingsFromDB } from "../db";
 import { useGetPairSettingsFromDB } from "../hooks/useGetPairSettingsFromDB";
-import { Fields, Overview } from "./Fields";
+import { Fields, Overview } from "./ListFields";
 
 export const PopulateFields = ({ onLoading, firebaseApp, pair }) => {
   const { fields, overview } = useGetPairSettingsFromDB(firebaseApp, pair);

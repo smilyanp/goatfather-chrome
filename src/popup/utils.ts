@@ -28,7 +28,7 @@ export const convertDataToDb = (
   fields: FieldInUI[]
 ) => {
   const dbFields = convertUiFieldsToDbFields(fields);
-  console.log("** convertOverviewToDbFields", overview, dbFields);
+
   const additionalValues = [
     // Target
     "Glaz Histogram Rise/Drop %",
@@ -58,8 +58,6 @@ export const convertDataToDb = (
       value: dbFields[value].value,
     };
   });
-
-  console.log("** convertOverviewToDbFields - overviewValues", overviewValues);
 
   return {
     overview: overviewValues,

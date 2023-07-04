@@ -16,7 +16,7 @@ export const useGetPairSettingsFromDB = (
     getPairSettingsFromDB(firebaseApp, pair).then((dbSettings) => {
       setSettings(dbSettings);
     });
-  }, []);
+  }, [firebaseApp, pair]);
 
   return settings;
 };

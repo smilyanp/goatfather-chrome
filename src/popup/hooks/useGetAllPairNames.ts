@@ -8,7 +8,6 @@ export const useGetAllPairNames = (firebaseApp: FirebaseApp) => {
   useEffect(() => {
     setIsLoading(true);
     getAllPairsFromDB(firebaseApp).then((pairs) => {
-      console.log("pairs", pairs);
       setPairs(pairs);
       setIsLoading(false);
     });

@@ -34,7 +34,6 @@ function init() {
       const defaultCollectedFields = await getCollectedFieldsFromStorage();
 
       root.render(
-        // <div className="tailwind">
         <ChakraProvider>
           <Popup
             defaultUser={defaultUser}
@@ -42,7 +41,6 @@ function init() {
             defaultCollectedFields={defaultCollectedFields}
           />
         </ChakraProvider>
-        // </div>
       );
     } else {
       root.render(
