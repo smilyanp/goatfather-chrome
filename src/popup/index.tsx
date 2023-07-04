@@ -5,6 +5,11 @@ import Popup from "./Popup";
 import NonTradingView from "./components/NonTradingView";
 import { getCurrentTab } from "../utils";
 import { ChakraProvider } from "@chakra-ui/react";
+import {
+  getCollectedFieldsFromStorage,
+  getLoggedInUserFromStorage,
+  getSelectedPairFromStorage,
+} from "./storage";
 
 function init() {
   const appContainer = document.createElement("div");
@@ -24,10 +29,18 @@ function init() {
     });
 
     if (activeTab.url.includes("tradingview.com/chart/")) {
+      const defaultUser = await getLoggedInUserFromStorage();
+      const defaultPair = await getSelectedPairFromStorage();
+      const defaultCollectedFields = await getCollectedFieldsFromStorage();
+
       root.render(
         // <div className="tailwind">
         <ChakraProvider>
-          <Popup />
+          <Popup
+            defaultUser={defaultUser}
+            defaultPair={defaultPair}
+            defaultCollectedFields={defaultCollectedFields}
+          />
         </ChakraProvider>
         // </div>
       );

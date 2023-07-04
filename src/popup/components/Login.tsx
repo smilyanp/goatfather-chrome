@@ -12,6 +12,8 @@ import {
   Stack,
   Box,
 } from "@chakra-ui/react";
+import { setLoggedInUserInStorage } from "../storage";
+import { Modal } from "./Modal";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,8 +25,8 @@ const Login = () => {
 
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // onLogin()
+      .then((data) => {
+        setLoggedInUserInStorage(data.user);
       })
       .catch((error) => {
         console.log("error", error);
@@ -33,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <Box minWidth={400}>
+    <Modal>
       <Card padding={10}>
         <Heading size="md">Login</Heading>
         <form onSubmit={handleLogin}>
@@ -65,7 +67,7 @@ const Login = () => {
           </Stack>
         </form>
       </Card>
-    </Box>
+    </Modal>
   );
 };
 

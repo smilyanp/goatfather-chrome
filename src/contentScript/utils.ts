@@ -3,14 +3,17 @@ export const getFieldType = (label: string) => {
     .parent()
     .next()
     .find("input").length;
+
   const select = $(`:econtains('${label}')`)
     .parent()
     .next()
     .find('[data-role="listbox"]').length;
+
   const colorSelect = $(`:econtains('${label}')`)
     .parent()
     .next()
     .find('[data-name="color-select"]').length;
+
   const checkbox = $(`:econtains('${label}')`)
     .children()
     .find('input[type="checkbox"]').length;
@@ -19,6 +22,7 @@ export const getFieldType = (label: string) => {
   if (select > 0) return "select";
   if (colorSelect > 0) return "colorSelect";
   if (checkbox > 0) return "checkbox";
+
   return "unknown";
 };
 
@@ -28,23 +32,43 @@ export const getFieldRows = () => {
     (element) =>
       (element.getAttribute("class").includes("first-") ||
         element.getAttribute("class").includes("fill-")) &&
-      !element.getAttribute("class").includes("adaptive-") &&
-      !element.getAttribute("class").includes("inlineRow-")
+      !element.getAttribute("class").includes("adaptive-") && // remove titles
+      !element.getAttribute("class").includes("inlineCell-") // remove checkboxes with inputs
   );
   return firstAndFillCells;
 };
 
-export const processEachField = (callback) => {
+export const scrapeEachField = () => {
   const fieldRows = getFieldRows();
+
+  const fields = [];
   $(fieldRows).each((index, fieldRow) => {
     const fieldLabel = $(fieldRow).children().text();
     const fieldType = getFieldType(fieldLabel);
+
     const forbiddenFields = ["unknown", "colorSelect", "checkbox"];
 
     if (!forbiddenFields.includes(fieldType)) {
-      callback(fieldType, fieldLabel, fieldRow);
+      if (fieldType === "input") {
+        const value = getInputValue(fieldLabel);
+        fields.push({
+          type: fieldType,
+          name: fieldLabel,
+          value,
+        });
+      }
+      if (fieldType === "select") {
+        const value = getSelectDropdownValue(fieldLabel);
+        fields.push({
+          type: fieldType,
+          name: fieldLabel,
+          value,
+        });
+      }
     }
   });
+
+  return fields;
 };
 
 export const setSelectDropdownValue = (label: string, value: string) => {

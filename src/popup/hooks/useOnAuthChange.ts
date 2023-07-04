@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { setLoggedInUserInStorage } from "../storage";
 
-export const useOnAuthChange = (): null | User => {
-  const [user, setUser] = useState<null | User>(null);
-
+export const useOnAuthChange = (
+  defaultUser: undefined | null | User
+): User | null => {
+  const [updatedUser, setUpdatedUser] = useState<undefined | null | User>(
+    defaultUser
+  );
   useEffect(() => {
     const auth = getAuth();
 
     // Check if the user is logged in
     onAuthStateChanged(auth, (firebaseUser: User | null) => {
-      if (!user) {
-        setUser(firebaseUser);
-      }
+      setUpdatedUser(firebaseUser);
+      setLoggedInUserInStorage(firebaseUser);
     });
-  }, [user]);
+  }, []);
 
-  return user;
+  return updatedUser;
 };
