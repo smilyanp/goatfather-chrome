@@ -53,7 +53,7 @@ export const CollectFields = ({
           </Button>
           {collectedFields?.fields && collectedFields.fields.length > 0 && (
             <Button onClick={() => handleSaveFields(collectedFields, pair)}>
-              Save
+              Save collection to database
             </Button>
           )}
           {collectedFields?.fields && collectedFields.fields.length > 0 && (

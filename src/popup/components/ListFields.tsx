@@ -12,6 +12,7 @@ import {
   Tr,
   Th,
   Td,
+  Text,
   TableContainer,
 } from "@chakra-ui/react";
 
@@ -24,7 +25,11 @@ export const Fields = ({
     <>
       {fields && fields.length > 0 && (
         <TableContainer marginBottom={5}>
-          <Table variant="striped" size="sm">
+          <Table
+            __css={{ "table-layout": "fixed", width: "full" }}
+            variant="striped"
+            size="sm"
+          >
             <Thead>
               <Tr>
                 <Th>Field</Th>
@@ -35,7 +40,17 @@ export const Fields = ({
               {fields.map((field) => (
                 <Tr key={field.name + "-" + field.value}>
                   <Td>
-                    <b>{field.name}</b>
+                    <Wrap>
+                      <Text
+                        as="b"
+                        style={{
+                          whiteSpace: "normal",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {field.name}
+                      </Text>
+                    </Wrap>
                   </Td>
                   <Td>{field.value}</Td>
                 </Tr>

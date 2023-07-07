@@ -26,6 +26,7 @@ import { useIsGoatfatherOpen } from "./hooks/useIsGoatfatherOpen";
 import { useGetAllPairNames } from "./hooks/useGetAllPairNames";
 import { useSignout } from "./hooks/useSignout";
 import { useSelectedPair } from "./hooks/useSelectedPair";
+import { Calibration } from "./components/Callibration";
 
 // Connect to firebase
 const firebaseApp = initializeApp(firebaseConfig);
@@ -62,28 +63,13 @@ function Popup({
 
         <Box visibility={loading || isLoading ? "hidden" : "visible"}>
           <HStack spacing={2} marginBottom={5}>
-            <Select
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                setSelectedPair(event.target.value);
-              }}
-            >
-              <option
-                value=""
-                selected={selectedPair === "" || selectedPair === undefined}
-              >
-                Select pair
-              </option>
-              {pairs.map(({ name, isPopulated }) => (
-                <option
-                  key={name}
-                  value={name}
-                  selected={selectedPair === name}
-                >
-                  {name} {isPopulated && "🐐"}
-                </option>
-              ))}
-            </Select>
+            <PairSelector
+              pairs={pairs}
+              selectedPair={selectedPair}
+              setSelectedPair={setSelectedPair}
+            />
             <Button onClick={() => signout()}>Signout</Button>
+            <Calibration onLoading={setLoading} />
           </HStack>
 
           {selectedPair && (
@@ -94,12 +80,7 @@ function Popup({
                 pair={selectedPair}
                 defaultCollectedFields={defaultCollectedFields}
               />
-              <Box position="relative" mt={10} mb={10}>
-                <Divider />
-                <AbsoluteCenter bg="white" px="4">
-                  Database section
-                </AbsoluteCenter>
-              </Box>
+              <SectionSeparator title="Database section" />
               <PopulateFields
                 firebaseApp={firebaseApp}
                 onLoading={setLoading}
@@ -113,5 +94,34 @@ function Popup({
   }
   return <Login />;
 }
+
+const PairSelector = ({ selectedPair, pairs, setSelectedPair }) => (
+  <Select
+    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedPair(event.target.value);
+    }}
+  >
+    <option
+      value=""
+      selected={selectedPair === "" || selectedPair === undefined}
+    >
+      Select pair
+    </option>
+    {pairs.map(({ name, isPopulated }) => (
+      <option key={name} value={name} selected={selectedPair === name}>
+        {name} {isPopulated && "🐐"}
+      </option>
+    ))}
+  </Select>
+);
+
+const SectionSeparator = ({ title }: { title: string }) => (
+  <Box position="relative" mt={10} mb={10}>
+    <Divider />
+    <AbsoluteCenter bg="white" px="4">
+      {title}
+    </AbsoluteCenter>
+  </Box>
+);
 
 export default Popup;

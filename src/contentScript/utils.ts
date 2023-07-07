@@ -1,49 +1,24 @@
-import { waitForElm } from "../utils";
-
 export const goatFatherTitle = '[data-dialog-name="Goatfather 4.0"]';
 
-export const getOverviewValues = () => {
-  return new Promise((resolve, reject) => {
-    const overviewValues = [];
-    const overviewFields = $(".backtesting-content-wrapper").find(
-      "[class^=containerCell-]"
-    );
-    $.each(overviewFields, (index, record) => {
-      const fieldName = $(record).find("[class^=title-]").text();
-      const fieldValue = $(record)
-        .find("[class^=secondRow-]")
-        .children()
-        .first()
-        .text();
-      overviewValues.push({ name: fieldName, value: fieldValue });
-    });
-    resolve(overviewValues);
-  });
-};
+export function waitForElm(selector) {
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector));
+    }
 
-export const getFieldValuesInModal = () => {
-  return new Promise((resolve, reject) => {
-    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
-      const fields = scrapeEachField();
-      resolve(fields);
+    const observer = new MutationObserver((mutations) => {
+      if (document.querySelector(selector)) {
+        resolve(document.querySelector(selector));
+        observer.disconnect();
+      }
     });
-  });
-};
 
-export const updateFieldsValuesInModal = (fields) =>
-  new Promise((resolve, reject) => {
-    waitForElm(goatFatherTitle).then((el: HTMLElement) => {
-      fields.forEach((field) => {
-        const fieldType = getFieldType(field.name);
-        if (fieldType === "input") {
-          setInputValue(field.name, field.value);
-        }
-        if (fieldType === "select") {
-          setSelectDropdownValue(field.name, field.value);
-        }
-      });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
     });
   });
+}
 
 export const getFieldType = (label: string) => {
   const checkbox = $(`:econtains('${label}')`)
@@ -74,52 +49,6 @@ export const getFieldType = (label: string) => {
   if (colorSelect > 0) return "colorSelect";
 
   return "unknown";
-};
-
-export const getFieldRows = () => {
-  const cells = $('[data-dialog-name="Goatfather 4.0"] [class^=cell-]');
-  const firstAndFillCells = [...cells].filter(
-    (element) =>
-      (element.getAttribute("class").includes("first-") ||
-        element.getAttribute("class").includes("fill-")) &&
-      !element.getAttribute("class").includes("adaptive-") && // remove titles
-      !element.getAttribute("class").includes("inlineCell-") // remove checkboxes with inputs
-  );
-  return firstAndFillCells;
-};
-
-export const scrapeEachField = () => {
-  const fieldRows = getFieldRows();
-
-  const fields = [];
-  $(fieldRows).each((index, fieldRow) => {
-    const fieldLabel = $(fieldRow).children().text();
-    const fieldType = getFieldType(fieldLabel);
-
-    const forbiddenFields = ["unknown", "colorSelect", "checkbox"];
-
-    if (!forbiddenFields.includes(fieldType)) {
-      if (fieldType === "input") {
-        const value = getInputValue(fieldLabel);
-        fields.push({
-          type: fieldType,
-          name: fieldLabel,
-          value,
-        });
-      }
-
-      if (fieldType === "select") {
-        const value = getSelectDropdownValue(fieldLabel);
-        fields.push({
-          type: fieldType,
-          name: fieldLabel,
-          value,
-        });
-      }
-    }
-  });
-
-  return fields;
 };
 
 export const setSelectDropdownValue = (label: string, value: string) => {
