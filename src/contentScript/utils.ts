@@ -1,4 +1,5 @@
-export const goatFatherTitle = '[data-dialog-name="Goatfather 4.0"]';
+export const goatFatherName = "Goatfather 4.0";
+export const goatFatherTitle = `[data-dialog-name="${goatFatherName}"]`;
 
 export function waitForElm(selector) {
   return new Promise((resolve) => {
@@ -68,7 +69,36 @@ export const setSelectDropdownValue = (label: string, value: string) => {
 
 export const setInputValue = (label: string, value: string) => {
   // Find input and set value
-  $(`:econtains('${label}')`).parent().next().find("input").val(value);
+  const input = $(`:econtains('${label}')`).parent().next().find("input");
+  setNativeInputValue(input[0], value);
+};
+
+export const setInputValueAndRecalculate = (label: string, value: string) =>
+  new Promise((resolve, reject) => {
+    const input = $(`:econtains('${label}')`).parent().next().find("input");
+
+    input.focus();
+    setNativeInputValue(input[0], value);
+
+    setTimeout(() => {
+      input.blur();
+      resolve(true);
+    }, 600);
+  });
+
+export const setNativeInputValue = (element: any, value: string) => {
+  // https://github.com/facebook/react/issues/10135
+  const lastValue = element.value;
+  element.value = value;
+  // @ts-ignore
+  const event = new Event("input", { target: element, bubbles: true });
+
+  // React 16
+  const tracker = element._valueTracker;
+  if (tracker) {
+    tracker.setValue(lastValue);
+  }
+  element.dispatchEvent(event);
 };
 
 export const getSelectDropdownValue = (label: string) => {
@@ -86,3 +116,29 @@ export const getInputValue = (label: string) => {
   // Find input and set value
   return $(`:econtains('${label}')`).parent().next().find("input").val();
 };
+
+export const openGoatfatherSettings = () => {
+  $(`[data-name="legend-source-title"]:econtains("${goatFatherName}")`)
+    .parent()
+    .parent()
+    .parent()
+    .find('[data-name="legend-settings-action"]')[0]
+    .dispatchEvent(new Event("touchend"));
+};
+
+// https://medium.com/hackernoon/functional-javascript-resolving-promises-sequentially-7aac18c4431e
+export const runSequential = (funcs) =>
+  funcs.reduce(
+    (promise, func) =>
+      promise.then((result) =>
+        func().then(Array.prototype.concat.bind(result))
+      ),
+    Promise.resolve([])
+  );
+
+export const getBiggestProfitFromArray = (array) =>
+  array.reduce((prev, current) =>
+    prev.profit > current.profit ? prev : current
+  );
+
+export const delay = (ms) => new Promise((res) => setTimeout(res, ms));

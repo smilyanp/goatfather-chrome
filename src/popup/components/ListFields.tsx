@@ -26,7 +26,7 @@ export const Fields = ({
       {fields && fields.length > 0 && (
         <TableContainer marginBottom={5}>
           <Table
-            __css={{ "table-layout": "fixed", width: "full" }}
+            __css={{ tableLayout: "fixed", width: "full" }}
             variant="striped"
             size="sm"
           >
@@ -73,7 +73,11 @@ export const Overview = ({
       {overview && overview.length > 0 ? (
         <Wrap marginBottom={5}>
           {overview.map((item) => (
-            <WrapItem flex="1 25%" marginBottom={5}>
+            <WrapItem
+              flex="1 25%"
+              marginBottom={5}
+              key={item.name + "--" + item.value}
+            >
               <Stat key={item.name}>
                 <StatLabel>{item.name}</StatLabel>
                 <StatNumber fontSize="md">{item.value}</StatNumber>

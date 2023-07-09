@@ -1,4 +1,4 @@
-import { goatFatherTitle } from "./utils";
+import { goatFatherTitle, openGoatfatherSettings } from "./utils";
 import "./jqueryExtend";
 import { calibratePair } from "./calibration";
 import { getFieldValuesInModal, getOverviewValues } from "./scrapeFields";
@@ -6,7 +6,13 @@ import { updateFieldsValuesInModal } from "./updateFields";
 
 chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
   if (msg.from === "popup" && msg.subject === "IsGoatfatherSettingsOpen") {
-    response($(goatFatherTitle).length > 0);
+    if ($(goatFatherTitle).length > 0) {
+      response(true);
+    } else {
+      // If the settings modal is not open, open it
+      openGoatfatherSettings();
+      response(true);
+    }
   }
   if (msg.from === "popup" && msg.subject === "GetPairSettings") {
     const fields = await getFieldValuesInModal();

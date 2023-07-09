@@ -68,8 +68,43 @@ export const getOverviewValues = () => {
   });
 };
 
+export const getPercentProfitableValue = () =>
+  // '[class^=reportContainer] [class^=containerCell]:nth-child(3) > [class^=secondRow] > div:first-child'
+  // Number(
+  //   $(`:econtains('Percent Profitable')`)
+  //     .parent()
+  //     .find("[class^=secondRow-]")
+  //     .children()
+  //     .first()
+  //     .text()
+  //     .replace("%", "")
+  // );
+  Number(
+    document
+      .querySelector(
+        "[class^=reportContainer] [class^=containerCell]:nth-child(3) > [class^=secondRow] > div:first-child"
+      )
+      .innerHTML.replace("%", "")
+  );
+
+export const getTotalClosedTradesValue = () =>
+  // '[class^=reportContainer] [class^=containerCell]:nth-child(2) > [class^=secondRow] > div:first-child'
+  // Number(
+  //   $(`:econtains('Total Closed Trades')`)
+  //     .parent()
+  //     .find("[class^=secondRow-]")
+  //     .children()
+  //     .first()
+  //     .text()
+  // );
+  Number(
+    document.querySelector(
+      "[class^=reportContainer] [class^=containerCell]:nth-child(2) > [class^=secondRow] > div:first-child"
+    ).innerHTML
+  );
+
 export const getFieldRows = () => {
-  const cells = $('[data-dialog-name="Goatfather 4.0"] [class^=cell-]');
+  const cells = $(`${goatFatherTitle} [class^=cell-]`);
   const firstAndFillCells = [...cells].filter(
     (element) =>
       (element.getAttribute("class").includes("first-") ||

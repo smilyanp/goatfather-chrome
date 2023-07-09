@@ -69,9 +69,10 @@ function Popup({
               setSelectedPair={setSelectedPair}
             />
             <Button onClick={() => signout()}>Signout</Button>
-            <Calibration onLoading={setLoading} />
           </HStack>
-
+          <p>
+            <Calibration onLoading={setLoading} />
+          </p>
           {selectedPair && (
             <>
               <CollectFields
@@ -97,14 +98,12 @@ function Popup({
 
 const PairSelector = ({ selectedPair, pairs, setSelectedPair }) => (
   <Select
+    defaultValue={""}
     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedPair(event.target.value);
     }}
   >
-    <option
-      value=""
-      selected={selectedPair === "" || selectedPair === undefined}
-    >
+    <option value="" selected={selectedPair === ""}>
       Select pair
     </option>
     {pairs.map(({ name, isPopulated }) => (
